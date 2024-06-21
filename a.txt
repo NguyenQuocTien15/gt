@@ -1,0 +1,866 @@
+﻿namespace ConsoleApp5
+{
+    internal class Node
+    {
+        //Fews:
+        internal int Data;
+        internal Node Next;
+
+        //Constructor:
+        public Node(int data)
+        {
+            Data = data;
+            Next = null;
+        }
+
+
+    }
+}
+﻿using System.Diagnostics.Tracing;
+using System.Reflection;
+using System.Security.AccessControl;
+
+namespace ConsoleApp5
+{
+    internal class LinkedList
+    {
+        //Fews:
+        private Node first;
+        private Node last;
+        private int size;
+
+        //Constructor LinkedList empty:
+        public LinkedList()
+        {
+            this.first = null;
+            this.last = null;
+            this.size = 0;
+        }
+
+        //Propperties:
+        public int Count { get => size; }
+        internal Node First { get => first; }
+        internal Node Last { get => last; }
+
+        //Method:
+        //Print:
+        public void PrintList()
+        {
+            if (first == null)
+            {
+                Console.WriteLine("LinkedList is empty!");
+            }
+            else
+            {
+                Console.WriteLine("Print LinkedList: ");
+                for (Node p = first; p != null; p = p.Next)
+                {
+                    Console.Write(p.Data + "  ");
+                }
+                Console.WriteLine($"Size = {size}");
+            }
+        }
+
+        //Add First:
+        public void AddFirst(int value)
+        {
+            Node pNew = new Node(value);
+            if (first == null)
+            {
+                first = pNew;
+                last = pNew;
+            }
+            else
+            {
+                pNew.Next = first;
+                first = pNew;
+            }
+            size++;
+        }
+
+        //Add Last:
+        public void AddLast(int value)
+        {
+            Node pNew = new Node(value);
+            if (first == null)
+            {
+                first = pNew;
+                last = pNew;
+            }
+            else
+            {
+                last.Next = pNew;
+                last = pNew;
+            }
+            size++;
+        }
+
+        //Find Node
+        public Node Find(int value)
+        {
+            for (Node p = first; p != null; p = p.Next)
+            {
+                if (p.Data == value)
+                {
+                    return p;
+                }
+            }
+            return null;
+        }
+
+        //Find Node Pre
+        public Node FindPre(Node q)
+        {
+            for (Node p = first; p.Next != null; p = p.Next)
+            {
+                if (p.Next == q)
+                {
+                    return p;
+                }
+            }
+            return null;
+        }
+
+        //Add After:
+        public void AddAfter(Node pre, int value)
+        {
+            if (pre != null)
+            {
+                Node pNew = new Node(value);
+                pNew.Next = pre.Next;
+                pre.Next = pNew;
+                if (last == pre)
+                {
+                    last = pNew;
+                }
+                size++;
+            }
+        }
+
+        //Add Before:
+        public void AddBefore(Node q, int value)
+        {
+            if (q != null)
+            {
+                Node pNew = new Node(value);
+                if (q == first
+                {
+                    pNew.Next = first;
+                    first = pNew;
+                }
+                else
+                {
+		    Node pre = first;
+		    while(pre.Next != q)
+		    {
+		    	pre = pre.Next;
+		    }
+                    pNew.Next = q;
+                    pre.Next = pNew;
+                }
+                size++;
+            }
+        }
+
+        //Remove First:
+        public void RemoveFirst()
+        {
+            if(first != null)
+            {
+                first = first.Next;
+                if(first == null) //Ds rong sau khi xoa 1 node dau
+                {
+                    last = null;
+                }
+                size--;
+            }
+        }
+
+        //Remove Last:
+        public void RemoveLast()
+        {
+            if (last == first) //Ds rong hoac co 1 node
+            {
+                first = null;
+                last = null;
+                size = 0;
+            }
+            else //Ds co tu 2 node tro len
+            {
+                Node q = first;
+                while (q.Next != last)
+                {
+                    q = q.Next;
+                }
+
+                q.Next = null;
+                last = q;
+                size--;
+            }
+        }
+
+        //Remove After
+        public void RemoveAfter(Node pre)
+        {
+            if(pre != null)
+            {
+                Node del = pre.Next; 
+                if(del != null)
+                {
+                    pre.Next = del.Next;
+                    if(del == last) //Node bi xoa la node cuoi
+                    {
+                        last = pre;
+                    }
+                    size--;
+                }
+            }
+        }
+
+        //Remove All:
+        public void Clear()
+        {
+            first = null;
+            last = null;
+            size = 0;
+        }
+
+        //Remove: int value
+        public void Remove(int value)
+        { 
+            if(first != null)
+            {
+                if(first.Data == value) //Xoa dau
+                {
+                    //RemoveFirst();
+                    first = first.Next;
+                    if (first == null)
+                        last = null;
+                    size--;
+                }
+                else //Xoa giua hoac cuoi
+                {
+                    Node pre = first;
+                    while(pre.Next != null && pre.Next.Data != value)
+                    {
+                        pre = pre.Next;
+                    }
+                    //pre: dang dung truoc node value
+                    //RemoveAfter(pre);
+                    if (pre != null)
+                    {
+                        Node del = pre.Next;
+                        if (del != null)
+                        {
+                            pre.Next = del.Next;
+                            if (del == last) //Node bi xoa la node cuoi
+                            {
+                                last = pre;
+                            }
+                            size--;
+                        }
+                    }
+                }
+            }
+        }
+
+        //Remove: Node p
+        public void Remove(Node p)
+        {
+            if (first != null)
+            {
+                if (first == p) //Xoa dau
+                {
+                    //RemoveFirst();
+                    first = first.Next;
+                    if (first == null)
+                        last = null;
+                    size--;
+                }
+                else //Xoa giua hoac cuoi
+                {
+                    Node pre = first;
+                    while (pre.Next != p)
+                    {
+                        pre = pre.Next;
+                    }
+                    //pre: dang dung truoc node value
+                    //RemoveAfter(pre);
+                    if (pre != null)
+                    {
+                        Node del = pre.Next;
+                        if (del != null)
+                        {
+                            pre.Next = del.Next;
+                            if (del == last) //Node bi xoa la node cuoi
+                            {
+                                last = pre;
+                            }
+                            size--;
+                        }
+                    }
+                }
+            }
+        }
+
+        //Swap:
+        public void Swap(ref int a, ref int b)
+        {
+            int t = a;
+            a = b;
+            b = t;
+        }
+        //Interchange Sort increase:
+        public void InterchangeSort()
+        {
+            for(Node p = first; p != last; p = p.Next)
+            {
+                for(Node q = p.Next;  q != null; q = q.Next)
+                {
+                    if (p.Data > q.Data)
+                    {
+                        Swap(ref p.Data, ref q.Data);
+                    }
+                }
+            }
+        }
+
+        //Selection Sort increase:
+        public void SelectionSort()
+        {
+            Node min;
+            for (Node p = first; p != last; p = p.Next)
+            {
+                min = p;
+                for (Node q = p.Next; q != null; q = q.Next)
+                {
+                    if (min.Data > q.Data)
+                    {
+                        min = q;
+                    }
+                }
+                //Hoan vi:
+                Swap(ref min.Data, ref p.Data);
+            }
+        }
+    }
+}
+
+
+Tin cập nhật về phím tắt … Vào Thứ Năm, 1 tháng 8, 2024, các phím tắt trong Drive sẽ được cập nhật để bạn có thể thao tác bằng chữ cái đầu tiên.Tìm hiểu thêm
+﻿/*
+ Ho ten : nguyen quoc tien
+MSSV: 21211tt3839
+ */
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ontap4_quoctien
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            //goi ham cau 2a
+            LinkedList l1 = new LinkedList();
+            LinkedList l2 = new LinkedList();
+            Console.WriteLine("nhap so luong phan tu L1: ");
+            int n1 = int.Parse(Console.ReadLine());
+            InputLast(l1, n1);
+            Console.Write("nhap so luong phan tu L2: ");
+            int n2 = int.Parse(Console.ReadLine());
+            InputLast(l2, n2);
+
+            //Goi ham cau 2b:
+            Console.WriteLine("Xuat L1: ");
+            l1.PrintList();
+            Console.WriteLine("Xuat L2: ");
+            l2.PrintList();
+
+            //Goi ham cau 2c
+            XTrungBinhCongAddAfterYLonNhat(l1);
+            Console.WriteLine("goi ham cau 2c: ");
+            l1.PrintList();
+
+            //Goi ham cau 2d
+            RemoveAfterMin(l1);
+            Console.WriteLine("goi ham cau 2d: ");
+            l1.PrintList();
+
+
+            //Goi ham cau 2e
+            LinkedList l3 = TaoL3(l1, l2);
+            Console.WriteLine("Pt co trong l1 ma khong co trong l2");
+            l3.PrintList();
+
+
+            //Goi ham cau 2f
+            l1.SelectionSort();
+            Console.WriteLine("Goi ham cau 2f: ");
+            l1.PrintList();
+
+            Console.ReadKey();
+        }
+      
+        /*
+        2a. Viết hàm nhập danh sách các số thực vào danh sách bằng cách thêm từng phần tử vào
+         cuối danh sách, việc nhập chỉ dừng lại khi người dùng nhập -1. Gọi thực thi cho 2 danh
+        sách l1, l2.
+        sách l1, l2.*/
+
+        /// <summary>
+        /// ham them phan tu cuoi vao danh sach
+        /// </summary>
+        /// <param name="l"></param>
+        /// <param name="n"></param>
+         static void InputLast(LinkedList l, double n)
+            {
+            for (int i = 0; i < n; i++)
+            {
+                Console.Write($"Nhap phan tu thu {i+1}: ");
+                l.AddLast(double.Parse(Console.ReadLine()));
+            }
+        
+          }
+        /*2b. Viết hàm xuất danh sách. Gọi thực thi cho 2 danh sách l1, l2*/
+
+
+        /*2c. Dùng hàm AddAfter câu 1b viết hàm thêm một phần tử X (X là số trung bình cộng của
+các phần tử có trong danh sách, được làm tròn 2 chữ số thập phân) vào sau phần tử Y
+(Y là số lớn nhất được tìm thấy trong danh sách). Gọi thực thi cho danh sách l1*/
+        /// <summary>
+        /// Ham tinh trung binh cong
+        /// </summary>
+        /// <param name="l"></param>
+        /// <returns></returns>
+        static double tinhTrungBinhCong(LinkedList l)
+        {
+            double sum = 0;
+            for (Node p = l.First; p != null; p = p.Next)
+            {
+                sum += p.Data;
+            }
+            return sum / l.Count;
+        }
+
+        /// <summary>
+        /// Ham tim max
+        /// </summary>
+        /// <param name="l"></param>
+        /// <returns></returns>
+        static Node FindMax(LinkedList l)
+        {
+            Node pMax = l.First;
+            for (Node p = l.First; p != null; p = p.Next)
+            {
+                if (pMax.Data < p.Data)
+                {
+                    pMax = p;
+                }
+            }
+            return pMax;
+        }
+
+        /// <summary>
+        /// Cau 2c
+        /// </summary>
+        /// <param name="l"></param>
+        static void XTrungBinhCongAddAfterYLonNhat(LinkedList l)
+        {
+            double tBC = Math.Round(tinhTrungBinhCong(l),2);
+            Node pMax = FindMax(l);
+            l.AddAfter(pMax,tBC);
+            Console.WriteLine("DS sau khi them: ");
+            l.PrintList();
+
+        }
+        /*
+         d. Dùng hàm RemoveAfter câu 1c viết hàm xóa phần tử đứng sau phần tử X (X là số dương
+nhỏ nhất được tìm thấy trong danh sách). Gọi thực thi cho danh sách l1. Lưu ý: Nếu
+danh sách không chứa X thì thông báo “không xóa được”.
+         */
+        /// <summary>
+        /// Cau 2d
+        /// </summary>
+        /// <param name="l"></param>
+        static void RemoveAfterMin(LinkedList l)
+        {
+            Node pMin = FindMin(l);
+            if (pMin != null)
+            {
+                l.RemoveAfter(pMin);
+                Console.WriteLine("Ds sau khi xoa so sau so duong nho nhat: ");
+                l.PrintList();
+            }
+            else
+            {
+                Console.WriteLine("khong xoa duoc vi ds khong chua so duong");
+            }
+        }
+
+        /// <summary>
+        /// tim min duong
+        /// </summary>
+        /// <param name="l"></param>
+        /// <returns></returns>
+        static Node FindMin(LinkedList l)
+        {
+            Node pMin = l.First;
+            Node p;
+            for(p = l.First; p != null;p = p.Next)
+            {
+                if(p.Data > 0)
+                {
+                    pMin = p; //pmin tro den so duong dau tien
+                    break;
+                }
+            }
+            for(Node q=p; q != null; q = q.Next)
+            {
+                if(q.Data < pMin.Data && q.Data > 0)
+                {
+                    pMin = q;
+                }
+            }
+            return pMin;
+        }
+
+        /*2e. Dùng hàm Find câu 1d viết hàm tạo ra danh sách l3 bao gồm các phần tử có trong danh
+sách l1 mà không có trong danh sách l2. (Giả sử các phần tử trong l1, l2 đều có giá trị
+phân biệt)  
+         */
+
+        /// <summary>
+        /// cau 2e. Tao L3
+        /// </summary>
+        /// <param name="l1"></param>
+        /// <param name="l2"></param>
+        /// <returns></returns>
+        static LinkedList TaoL3 (LinkedList l1, LinkedList l2)
+        {
+            LinkedList l3 = new LinkedList();
+            for (Node p = l1.First; p != null; p = p.Next)
+            {
+                if (l2.Find(p.Data) == null) //khong co trong l2
+                {
+                    l3.AddLast(p.Data);
+                }
+            }
+            return l3;
+        }
+
+
+    }
+}
+
+Tin cập nhật về phím tắt … Vào Thứ Năm, 1 tháng 8, 2024, các phím tắt trong Drive sẽ được cập nhật để bạn có thể thao tác bằng chữ cái đầu tiên.Tìm hiểu thêm
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ontap2_nguyenquoctien
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            //<-----2b------------>//
+            Console.Write("Nhap so phan tu n1: ");
+            int n1 = Convert.ToInt32(Console.ReadLine());
+            LinkedList l1 = new LinkedList();
+            InputFirst1(l1, n1);
+
+            Console.Write("Nhap so phan tu n2: ");
+            int n2 = Convert.ToInt32(Console.ReadLine());
+            LinkedList l2 = new LinkedList();
+            InputFirst1(l2, n2);
+
+            Console.WriteLine("Xuat l1");
+            l1.PrintList();
+
+            Console.WriteLine("Xuat l2");
+            l2.PrintList();
+            //<-----2b------------>//
+
+            Console.ReadKey();
+        }
+        //2a 1
+        static void InputFirst1(LinkedList l, int n)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                int x = 0;
+                do
+                {
+                    Console.Write("Nhap x = ");
+                    x = Convert.ToInt32(Console.ReadLine());
+                } while (x < 10 || x > 99);
+                l.AddFirst(x);
+            }
+        }
+
+        //<=--------------c. Dùng hàm AddBefore câu 1b viết hàm thêm một phần tử X là số có 2 chữ số bất kỳ
+        //(được nhập từ bàn phím) vào trước phần tử Y trong danh sách(Với Y là số nguyên tố
+        //đầu tiên). Gọi thực thi cho danh dách l1.Lưu ý: Nếu danh sách không chứa số nguyên
+        //tố nào thì thông báo “Không thêm được”-------------------->
+        //kiem tra so hoan thien
+        //tìm vị trí số hoàn thiện dau/[cuoi]
+
+
+        static void AddBeforeSNTDau(LinkedList l)
+        {
+            
+           
+            for (Node p = l.First; p != null; p = p.Next)
+            {
+                Console.Write("Nhap so X muon them: ");
+                int soThem = Convert.ToInt32(Console.ReadLine());
+                if (KTsoNguyenTo(p.Data) == true)
+                {
+                    l.AddBefore(p, soThem);
+                    return;
+
+                }
+                else
+                {
+                    Console.WriteLine("Khong them duoc!");
+                }
+
+
+            }
+           
+        }
+
+        static bool KTsoNguyenTo(int n)
+        {
+            int dem = 0;
+            
+            for (int i = 1 ; i <= n ; i++)
+            {
+                if (n % i == 0)
+                {
+                    dem++;
+                }
+            }
+
+                return (dem==2);
+
+        }
+        //2b.<-----kiem tra so nguyen to------>
+
+        //<-----2d. Dùng hàm Remove câu 1c viết hàm xóa tất cả số chính phương có trong danh sách.Gọi
+        //thực thi cho danh sách l1.Lưu ý: Nếu danh sách không chứa số chính phương nào thì
+        //thông báo “Không xóa được”---------->
+
+        static void XoaSoChinhPhuong(LinkedList l)
+        {
+            int iDem = 0;
+           
+            for (Node p = l.First; p != null; p = p.Next)
+            {
+                if (KTsoChinhPhuong(p.Data))
+                {
+                    l.Remove(p.Data);
+                    iDem++;
+
+                }
+
+            }
+            if (iDem ==0)
+                Console.WriteLine("Khong xoa duoc");
+            else
+            {
+                Console.WriteLine("ds sau khi xoa:");
+                l.PrintList();
+            }
+        }
+
+        static bool KTsoChinhPhuong(int n)
+        {
+            if (n <= 0)
+            {
+                return false;
+            }
+            double srq = Math.Sqrt(n);
+            return srq == (int)(srq);
+           
+
+        }
+        //<----- Dùng hàm Remove câu 1c viết hàm xóa tất cả số chính phương có trong danh sách.Gọi
+        //thực thi cho danh sách l1.Lưu ý: Nếu danh sách không chứa số chính phương nào thì
+        //thông báo “Không xóa được”---------->
+
+
+
+    }
+}
+Tin cập nhật về phím tắt … Vào Thứ Năm, 1 tháng 8, 2024, các phím tắt trong Drive sẽ được cập nhật để bạn có thể thao tác bằng chữ cái đầu tiên.Tìm hiểu thêm
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Ontap1
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Nhap so phan tu n1: ");
+            int n1 = Convert.ToInt32(Console.ReadLine());
+            LinkedList l1 = new LinkedList();
+            InputFirst2(l1, n1);
+
+            Console.Write("Nhap so phan tu n2: ");
+            int n2 = Convert.ToInt32(Console.ReadLine());
+            LinkedList l2 = new LinkedList();
+            InputFirst2(l2, n2);
+
+            //2b
+            Console.WriteLine("Xuat l1");
+            l1.PrintList();
+
+            Console.WriteLine("Xuat l2");
+            l2.PrintList();
+
+            //2c
+            Console.Write("Nhap so muon them: ");
+            int so = Convert.ToInt32(Console.ReadLine());
+            Node p = SHHDau(l1);
+            if (p == null)
+            {
+                Console.WriteLine("Khong them duoc");
+            }
+            else
+            {
+                l1.AddAfter(p, so);
+            }
+            Console.WriteLine("Xuat lai l1");
+            l1.PrintList();
+
+            //2d
+            XoaSo(l1);
+            l1.PrintList();
+            //2e
+            LinkedList l3 = new LinkedList();
+            l3 = Lap(l1,l2);
+            Console.WriteLine("Danh sach l3 :");
+            l3.PrintList();
+
+            //2f
+            l1.InterchangeSort();
+            l1.PrintList();
+
+            Console.ReadKey();
+        }
+        //lập ds mới
+        static LinkedList Lap(LinkedList l1, LinkedList l2)
+        {
+            LinkedList l3 = new LinkedList();
+            for (Node p = l1.First; p != null; p = p.Next)
+            {
+                l3.AddFirst(p.Data);
+            }
+            for(Node p = l2.First; p != null; p = p.Next)
+            {
+                if(l1.Find(p.Data)==null)
+                {
+                    l3.AddFirst(p.Data);
+                }
+            }
+            return l3;
+        }
+
+        //xóa số
+        static void XoaSo(LinkedList l)
+        {
+            Console.Write("Nhap so muon xoa: ");
+            int so2 = Convert.ToInt32(Console.ReadLine());
+            bool check = false;
+            for (Node p = l.First; p != null; p = p.Next)
+            {
+                if(p.Data == so2)
+                {
+                    l.Remove(so2);
+                    check = true;
+                }
+            }
+            if (check == false)
+                Console.WriteLine("Khong xoa duoc");
+        }
+        
+
+
+        //2a 1
+        static void InputFirst1(LinkedList l, int n)
+        {
+            for(int i = 0; i < n; i++)
+            {
+                int x = 0;
+                do
+                {
+                    Console.Write("Nhap x = ");
+                    x=Convert.ToInt32(Console.ReadLine());
+                } while (x < 10 || x > 99);
+                l.AddFirst(x);
+            }
+        }
+
+        //2a 2
+        static void InputFirst2(LinkedList l, int n)
+        {
+            Random rd = new Random();
+            for (int i = 0; i < n; i++)
+            {
+                l.AddFirst(rd.Next(10,100));
+            }
+        }
+
+        //tìm vị trí số hoàn thiện dau/[cuoi]
+        static Node SHHDau(LinkedList l)
+        {
+            Node pHH = null;
+            for(Node p = l.First; p !=null; p = p.Next)
+            {
+                if (KTsoHoanThien(p.Data))
+                {
+                    pHH = p;
+                    break;
+                      
+                }
+
+            }
+            return null;
+        }
+        //kiem tra so hoan thien
+        static bool KTsoHoanThien(int n)
+        {
+            int tong = 0;
+            for (int i = 1; i < n/2; i++)
+            {
+                if (n % i == 0)
+                {
+                    tong += i;
+                }
+            }
+            if (tong == n)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        //kiem tra so hoan hao
+        
+    }
+}
